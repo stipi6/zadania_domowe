@@ -98,17 +98,20 @@ while True:
                         if record["cena"] == price:
                             record["ilosc"] += qty
                             no_price = False
+                            balance-=(qty * price)
                             print(f"zakupiono produkt o nazwie {item} w ilosci {qty} o cenie {price} zl")
                             history.append(f"zakupiono produkt o nazwie {item} w ilosci {qty} o cenie {price} zl. "
                                            f"odjeto od salda {price*qty}")
 
                     if no_price:
                         warehouse[item].append({"ilosc":qty, "cena":price})
+                        balance-=(qty*price)
                         print(f"zakupiono produkt o nazwie {item} w ilosci {qty} o cenie {price} zl")
                         history.append(f"zakupiono produkt o nazwie {item} w ilosci {qty} o cenie {price} zl. "
                                        f"odjeto od salda {price*qty} zl")
                 else:
                     warehouse[item] = [{"ilosc":qty, "cena":price}]
+                    balance-=(qty*price)
                     print(f"zakupiono produkt o nazwie {item} w ilosci {qty} o cenie {price} zl")
                     history.append(f"zakupiono produkt o nazwie {item} w ilosci {qty} o cenie {price} zl. "
                                    f"odjeto od salda {price*qty} zl")
