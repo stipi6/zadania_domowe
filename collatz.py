@@ -1,6 +1,7 @@
 def collatz_length(x):
 	length = 1
 	while x != 1:
+		print(x)
 		if x % 2 == 0:
 			x = x / 2
 		else:
