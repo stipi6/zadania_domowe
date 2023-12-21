@@ -9,13 +9,11 @@
     <style>
         html, body {
             background-color: #6D435A;
+            background-attachment: fixed;
             font-family: Monaco, Lucida Console, Monospace;
-            height: 100%;
-            margin: 0;
-            padding: 0;
         }
         h1 {
-            font-size: 70px;
+            font-size: 60px;
             padding-top: 20px;
             padding-bottom: 20px;
             text-align: center;
@@ -60,9 +58,15 @@
 </head>
 <body>
 <h1>historia</h1>
+    <div class="alert"><br>
+        <p class="text-center">komunikat:</p>
+        {% if message %}
+        <p class="text-center">{{message}}</p>
+        {% endif %}
+    </div>
     <p class="text-center"> podaj parametry aby wyswietlic dany zakres </p>
     <p class="text-center">niewprowadzenie parametrow skutkuje wyswietleniem calej historii </p>
-    <form action="/historia/" method="get">
+    <form action="/history" method="post">
         <label for="historia">przeglad historii</label>
         <label for="line_from">od:</label><br>
         <input type="number" id="line_from" name="line_from"><br>
@@ -71,24 +75,18 @@
         <input type="submit" value="wyswietl">
     </form>
 <table id="tabela">
-        <tr>
-            <th>number operacji</th>
-            <th>operacja</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td></td>
-        </tr>
     <tr>
-            <td>3</td>
-            <td></td>
-        </tr>
-    </table>
+        <th>numer operacji</th>
+        <th>operacja</th>
+    </tr>
+   {% for action in actions %}
+    <tr>
+        <td>{{loop.index}}</td>
+        <td>{{action}}</td>
+    </tr>
+    {% endfor %}
+</table>
     <div id="historia"></div>
-    <a href="index.html">powrot</a>
+    <a href="/">powrot</a>
 </body>
 </html>

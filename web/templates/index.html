@@ -9,28 +9,30 @@
     <style>
         html, body {
             background-color: #6D435A;
+            background-attachment: fixed;
             font-family: Monaco, Lucida Console, Monospace;
-            height: 100%;
-            margin: 0;
-            padding: 0;
         }
         h1 {
-            font-size: 70px;
-            padding-top: 20px;
-            padding-bottom: 30px;
+            font-size: 60px;
+            padding-top: 10px;
+        }
+        h2 {
+        font-size: 35px;
+        margin-top: 20px;
         }
         .form-section {
-            padding: 20px 0;
+            padding: 10px 0;
             border: 8px double #BDB4BF;
         }
         .form-section p {
-            font-size: 30px;
-            margin: 20px 0;
+            font-size: 25px;
+            margin: auto;
         }
         .form-section form {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin: 0 0;
         }
         .form-section form input {
             margin-bottom: 8px;
@@ -38,7 +40,7 @@
         .center {
             display: flex;
             justify-content: center;
-            margin-top: 30px;
+            margin-top: 20px;
         }
         .btn-historia {
             background-color: #8ca08c;
@@ -51,45 +53,87 @@
             font-size: 15px;
             color: #e5cab3;
         }
+        table {
+            margin: auto;
+            color: #BDB4BF;
+            width: 80%;
+            margin-top: 40px;
+        }
+        th, td {
+            font-size: 16px;
+            border: 3px solid;
+        }
+        th {
+            padding: 10px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
     <h1 class="text-center">magazyn</h1>
+        <div class="alert"><br>
+            <p class="text-center">komunikat:</p>
+            {% if message %}
+                <p class="text-center">{{message}}</p>
+                {% endif %}
+        </div>
     <div class="container">
         <div class="row">
             <div class="col form-section">
                 <p class="text-center">zakup</p>
-                <form id="buy">
-                    <label for="buying-item">produkt</label>
-                    <input type="text" class="form-control" id="buying-item" placeholder="produkt"><br>
+                <form action="/buy" method="post">
+                    <label for="buying-item">podaj nazwe produktu</label>
+                    <input type="text" class="form-control" id="buying-item" name="item" placeholder="produkt"><br>
                     <label for="buying-price">cena</label>
-                    <input type="number" class="form-control" id="buying-price" placeholder="cena"><br>
+                    <input type="number" class="form-control" id="buying-price" name="price" placeholder="cena"><br>
                     <label for="buying-qty">ilosc</label>
-                    <input type="number" class="form-control" id="buying-qty" placeholder="ilosc"><br>
+                    <input type="number" class="form-control" id="buying-qty" name="qty" placeholder="ilosc"><br>
                     <input type="submit" class="form-control" value="kup"><br>
                 </form>
             </div>
             <div class="col form-section">
                 <p class="text-center">sprzedaz</p>
-                <form id="sell">
-                    <label for="selling-item">produkt</label>
-                    <input type="text" class="form-control" id="selling-item" placeholder="produkt"><br>
+                <form action="/sell" method="post">
+                    <label for="selling-item">podaj nazwe produktu</label>
+                    <input type="text" class="form-control" id="selling-item" name="item" placeholder="produkt"><br>
                     <label for="selling-price">cena</label>
-                    <input type="number" class="form-control" id="selling-price" placeholder="cena"><br>
+                    <input type="number" class="form-control" id="selling-price" name="price" placeholder="cena"><br>
                     <label for="selling-qty">ilosc</label>
-                    <input type="number" class="form-control" id="selling-qty" placeholder="ilosc"><br>
+                    <input type="number" class="form-control" id="selling-qty" name="qty" placeholder="ilosc"><br>
                     <input type="submit" class="form-control" value="sprzedaj"><br>
                 </form>
+
             </div>
             <div class="col form-section">
                 <p class="text-center">zmiana salda</p>
-                <form id="balance">
-                    <label for="money">wartosc</label>
-                    <input type="number" class="form-control" id="money" placeholder="wartosc"><br>
+                <p class="text-center">saldo: {{balance}}</p>
+                <form action="/balance" method="post">
+                    <label for="add">podaj wartosc zmieniajaca saldo</label><br>
+                    <input type="number" class="form-control" id="add" name="add" placeholder="wartosc"><br>
                     <input type="submit" class="form-control" value="wyswietl">
                 </form>
             </div>
         </div>
+    </div>
+    <div>
+        <h2 class="text-center">stan magazynu</h2>
+    <table>
+    <tr>
+        <td>przedmiot</td>
+        <td>ilosc</td>
+        <td>cena</td>
+    </tr>
+    <tr>
+        {% for item, records in warehouse.items() %}
+                {% for record in records %}
+                <tr>
+                    <td>{{item}}</td>
+                    <td>{{record["ilosc"]}}</td>
+                    <td>{{record["cena"]}}</td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+    </table>
     </div>
     <div class="center">
         <a href="history.html" class="btn-historia">historia</a>
