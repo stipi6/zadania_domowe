@@ -73,9 +73,7 @@
     <h1 class="text-center">magazyn</h1>
         <div class="alert"><br>
             <p class="text-center">komunikat:</p>
-            {% if message %}
                 <p class="text-center">{{message}}</p>
-                {% endif %}
         </div>
     <div class="container">
         <div class="row">
@@ -124,15 +122,13 @@
         <td>cena</td>
     </tr>
     <tr>
-        {% for item, records in warehouse.items() %}
-                {% for record in records %}
-                <tr>
-                    <td>{{item}}</td>
-                    <td>{{record["ilosc"]}}</td>
-                    <td>{{record["cena"]}}</td>
-                </tr>
-                {% endfor %}
-                {% endfor %}
+    {% for product in products %}
+        <tr>
+            <td>{{product.name}}</td>
+            <td>{{product.qty}}</td>
+            <td>{{product.price}}</td>
+        </tr>
+    {% endfor %}
     </table>
     </div>
     <div class="center">
