@@ -30,7 +30,6 @@ def get_books(max_results=20):
 	url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults={max_results}"
 	response = requests.get(url)
 	data = json.loads(response.text)
-	print(data)
 	for item in data["items"]:
 		title = item["volumeInfo"]["title"]
 		authors = ",".join(item["volumeInfo"].get("authors", []))

@@ -1,17 +1,17 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, url_for
 from flask_alembic import Alembic
-from func import Readers, Books, Library, db, get_books
+from func import Readers, Books, db, get_books
 from app import app
 import datetime
 
 @app.route("/")
 def index():
-	with app.app_context():
-		db.create_all()
-		if Books.query.count() == 0:
-			get_books()
-	books = Books.query.all()
-	return render_template('index.html', books=books)
+    with app.app_context():
+        db.create_all()
+        if Books.query.count() == 0:
+            get_books()
+    books = Books.query.all()
+    return render_template("index.html", books=books)
 
 @app.route("/borrow_book", methods=["POST"])
 def borrow_book():
@@ -23,10 +23,10 @@ def borrow_book():
         if book and not book.is_borrowed and reader:
             book.is_borrowed = True
             book.borrowed_at = datetime.datetime.now()
+            book.reader_id = reader.id
             db.session.commit()
-            return "Książka została pomyślnie wypożyczona."
-        else:
-            return "Wystąpił błąd podczas wypożyczania książki."
+    return redirect(url_for("readers_page"))
+
 
 @app.route("/return_book", methods=["POST"])
 def return_book():
@@ -39,14 +39,14 @@ def return_book():
             book.is_borrowed = False
             book.return_by = datetime.datetime.now()
             db.session.commit()
-            return "Książka została pomyślnie zwrócona."
-        else:
-            return "Wystąpił błąd podczas zwracania książki."
+    return redirect(url_for("readers_page"))
+
 
 @app.route("/readers.html", methods=["GET"])
 def readers_page():
-	readers = Readers.query.all()
-	return render_template("readers.html", readers=readers)
+    readers = Readers.query.all()
+    books = Books.query.all()
+    return render_template("readers.html", readers=readers, books=books)
 
 @app.route("/add_reader", methods=["POST"])
 def add_reader():
@@ -55,11 +55,11 @@ def add_reader():
         new_reader = Readers(fullname=fullname)
         db.session.add(new_reader)
         db.session.commit()
-    return redirect("/")
+    return redirect("/readers.html")
 
 
 alembic = Alembic()
 alembic.init_app(app)
 
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(debug=True)

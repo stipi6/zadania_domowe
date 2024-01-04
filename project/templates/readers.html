@@ -11,6 +11,8 @@
             background: #1673a5 fixed;
             font-family: Arial, sans-serif;
             color: #f0f0f0;
+            margin: 0;
+            padding: 0;
         }
         form {
             display: block;
@@ -23,13 +25,24 @@
         }
         .col {
             display: inline-block;
+            width: 100%;
+            padding: 0;
+            margin: 0;
         }
-        table, th, td {
+        table {
+            width: 100%;
+        }
+        th, td {
             border: 1px solid;
-            width: 80%;
             padding: 10px;
         }
-        th {
+        th:first-child {
+            width: 30%;
+            background-color: #8ba9db;
+            color: white;
+        }
+        th:last-child {
+            width: 70%;
             background-color: #8ba9db;
             color: white;
         }
@@ -42,37 +55,70 @@
 
 <body>
     <h1 class="text-center">czytelnicy</h1>
-<div class="form-container">
+    <div class="form-container">
         <div class="col">
             <h2 class="text-center">dodaj czytelnika</h2>
             <form action="/add_reader" method="post">
                 <label for="fullname">imie i nazwisko czytelnika:</label><br>
-                <input type="text" id="fullname" name="fullname" placeholder="Wpisz imię i nazwisko"><br>
-                <input type="submit" value="wprowadz">
+                <input type="text" id="fullname" name="fullname" placeholder="wpisz imię i nazwisko"><br>
+                <input type="submit" value="wprowadz"><br>
             </form>
         </div>
     </div>
     <div class="table-container">
         <div class="col">
-    <h3 class="text-center">czytelnicy</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>imie i nazwisko</th>
-                <th>wypozyczono</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for reader in readers %}
-            <tr>
-                <td>{{ reader.fullname }}</td>
-                <td></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <h3 class="text-center">czytelnicy</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>imie i nazwisko</th>
+                        <th>wypozyczono</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reader in readers %}
+                    <tr>
+                        <td>{{ reader.fullname }}</td>
+                        <td>
+                            {% for book in reader.books %}
+                            {{ book.title }}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="borrow-return-forms">
+            <form action="/borrow_book" method="post">
+                <h4>wypozycz ksiazke</h4>
+                <label for="borrow-book-id">wybierz ksiazke:</label><br>
+                <select id="borrow-book-id" name="book_id" required>
+                    {% for book in books %}
+                    <option value="{{ book.id }}">{{ book.title }}</option>
+                    {% endfor %}
+                </select><br>
+                <label for="borrow-reader-fullname">wybierz czytelnika:</label><br>
+                <select id="borrow-reader-fullname" name="reader_fullname" required>
+                    {% for reader in readers %}
+                    <option value="{{ reader.fullname }}">{{ reader.fullname }}</option>
+                    {% endfor %}
+                </select><br>
+                <input type="submit" value="wypozycz"><br>
+            </form>
 
-<div id="czytelnicy"></div>
+            <form action="/return_book" method="post">
+                <h4>zwroc ksiazke</h4>
+                <label for="return-book-id">ID książki:</label>
+                <input type="text" id="return-book-id" name="book_id" required>
+                <label for="return-reader-fullname">imie i nazwisko czytelnika:</label>
+                <input type="text" id="return-reader-fullname" name="reader_fullname" required>
+                <input type="submit" value="zwroc"><br>
+            </form>
+        </div>
+        <div id="czytelnicy"></div>
+    </div>
     <a href="/">powrot</a>
 </body>
+
 </html>
