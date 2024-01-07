@@ -109,12 +109,20 @@
 
             <form action="/return_book" method="post">
                 <h4>zwroc ksiazke</h4>
-                <label for="return-book-id">ID książki:</label>
-                <input type="text" id="return-book-id" name="book_id" required>
-                <label for="return-reader-fullname">imie i nazwisko czytelnika:</label>
-                <input type="text" id="return-reader-fullname" name="reader_fullname" required>
+                    <label for="return-book-id">wybierz ksiazke:</label><br>
+                    <select id="return-book-id" name="book_id" required>
+                        {% for book in books %}
+                    <option value="{{ book.id }}">{{ book.title }}</option>
+                        {% endfor %}
+            </select><br>
+                <label for="return-reader-fullname">wybierz czytelnika:</label><br>
+                <select id="return-reader-fullname" name="reader_fullname" required>
+                    {% for reader in readers %}
+                <option value="{{ reader.fullname }}">{{ reader.fullname }}</option>
+                    {% endfor %}
+            </select><br>
                 <input type="submit" value="zwroc"><br>
-            </form>
+        </form>
         </div>
         <div id="czytelnicy"></div>
     </div>

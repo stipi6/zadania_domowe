@@ -35,9 +35,10 @@ def return_book():
     if book_id and reader_fullname:
         book = Books.query.get(book_id)
         reader = Readers.query.filter_by(fullname=reader_fullname).first()
-        if book and book.is_borrowed and reader:
+        if book and book.is_borrowed and reader and book.reader_id == reader.id:
             book.is_borrowed = False
             book.return_by = datetime.datetime.now()
+            book.reader_id = None
             db.session.commit()
     return redirect(url_for("readers_page"))
 
