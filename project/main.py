@@ -22,7 +22,8 @@ def borrow_book():
         reader = Readers.query.filter_by(fullname=reader_fullname).first()
         if book and not book.is_borrowed and reader:
             book.is_borrowed = True
-            book.borrowed_at = datetime.datetime.now()
+            book.borrowed_at = datetime.datetime.now().date()
+            book.return_by = book.borrowed_at + datetime.timedelta(days=30)
             book.reader_id = reader.id
             db.session.commit()
     return redirect(url_for("readers_page"))
@@ -37,7 +38,7 @@ def return_book():
         reader = Readers.query.filter_by(fullname=reader_fullname).first()
         if book and book.is_borrowed and reader and book.reader_id == reader.id:
             book.is_borrowed = False
-            book.return_by = datetime.datetime.now()
+            book.return_by = book.borrowed_at + datetime.timedelta(days=30)
             book.reader_id = None
             db.session.commit()
     return redirect(url_for("readers_page"))

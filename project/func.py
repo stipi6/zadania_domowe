@@ -14,8 +14,8 @@ class Books(db.Model):
 	author = db.Column(db.String(150), nullable=False)
 	is_borrowed = db.Column(db.Boolean, default=False)
 	reader_id = db.Column(db.Integer, db.ForeignKey("readers.id"))
-	borrowed_at = db.Column(db.DateTime)
-	return_by = db.Column(db.DateTime)
+	borrowed_at = db.Column(db.Date)
+	return_by = db.Column(db.Date)
 
 class Readers(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -59,14 +59,14 @@ class Library:
 	def add_reader(self, fullname):
 		self.readers.append(Reader(fullname))
 
-	def borrow_book(self, id, fullname, days=30):
+	def borrow_book(self, id, fullname):
 		book = Books.query.get(id)
 		if book and not book.reader_id:
 			reader = Readers.query.filter_by(fullname=fullname).first()
 			if reader:
 				book.reader_id = reader.id
 				book.borrowed_at = datetime.datetime.now()
-				book.return_by = book.borrowed_at + datetime.timedelta(days=days)
+				book.return_by = book.borrowed_at + datetime.timedelta(days=30)
 				db.session.commit()
 				return True
 		return False

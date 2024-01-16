@@ -37,12 +37,22 @@
             padding: 10px;
         }
         th:first-child {
-            width: 30%;
+            width: 20%;
+            background-color: #8ba9db;
+            color: white;
+        }
+        th:nth-child(2) {
+            width: 50%;
+            background-color: #8ba9db;
+            color: white;
+        }
+        th:nth-child(3) {
+            width: 15%;
             background-color: #8ba9db;
             color: white;
         }
         th:last-child {
-            width: 70%;
+            width: 15%;
             background-color: #8ba9db;
             color: white;
         }
@@ -73,20 +83,32 @@
                     <tr>
                         <th>imie i nazwisko</th>
                         <th>wypozyczono</th>
+                        <th>data wypozyczenia</th>
+                        <th>data zwrotu</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for reader in readers %}
-                    <tr>
-                        <td>{{ reader.fullname }}</td>
-                        <td>
-                            {% for book in reader.books %}
-                            {{ book.title }}<br>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+            <tbody>
+            {% for reader in readers %}
+        <tr>
+        <td>{{ reader.fullname }}</td>
+        <td>
+            {% for book in reader.books %}
+            {{ book.title }}<br>
+            {% endfor %}
+        </td>
+        <td>
+            {% for book in reader.books %}
+            {{ book.borrowed_at }}<br>
+            {% endfor %}
+        </td>
+        <td>
+            {% for book in reader.books %}
+            {{ book.return_by }}<br>
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
             </table>
         </div>
         <div class="borrow-return-forms">
